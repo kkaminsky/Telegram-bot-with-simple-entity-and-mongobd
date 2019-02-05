@@ -57,7 +57,7 @@ class TelegramBotImpl @Autowired constructor(
                     updateStatusForTable(update.callbackQuery,update.callbackQuery.data)
                 } else if (update.message != null)
                     sendFirstMsg(update.getMessage())
-                    sendAddContact(update.message)git
+                    sendAddContact(update.message)
 
 
             }
