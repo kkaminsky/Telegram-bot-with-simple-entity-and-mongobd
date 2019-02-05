@@ -6,6 +6,7 @@ import com.example.lab06.entity.Order
 
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.objects.CallbackQuery
@@ -19,6 +20,7 @@ import java.sql.Date
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.Executor
+
 
 @Service
 class TelegramBotImpl @Autowired constructor(
@@ -55,6 +57,11 @@ class TelegramBotImpl @Autowired constructor(
                     updateStatusForTable(update.callbackQuery,update.callbackQuery.data)
                 } else if (update.message != null)
                     sendFirstMsg(update.getMessage())
+                    sendAddContact(update.message)
+                    sendAddCustomer(update.editedMessage)
+                    sendAddCustomer(update.editedMessage)
+
+
             }
 
             1-> {
@@ -185,6 +192,7 @@ class TelegramBotImpl @Autowired constructor(
                 order!!.employee = employeeService.get(text[8])
                 order!!.services = getListService(text[9].split(','))
                 orderService.update(order)
+
             }
             else if (telegramUserService.getAction(message.from.id)=="Поиск"){
                 val order = orderService.get(message.text)
@@ -394,6 +402,7 @@ class TelegramBotImpl @Autowired constructor(
         sm.chatId = message.chatId.toString()
         val orders = orderService.getAll()
         var text = ""
+
         for(i in orders) {
             text = text + i.toString() + "\n"
         }
@@ -595,6 +604,7 @@ class TelegramBotImpl @Autowired constructor(
         markupInline.keyboard = rowsInline
         sm.replyMarkup = markupInline
         try {
+
             execute(sm)
         } catch (e: TelegramApiException) {
             logger.error(e.message, e)
