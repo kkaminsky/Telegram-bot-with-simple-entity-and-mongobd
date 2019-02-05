@@ -46,6 +46,8 @@ class TelegramBotImpl @Autowired constructor(
     override fun onUpdateReceived(update: Update) {
         executor.execute {
             parseComand(update)
+
+
         }
     }
 
